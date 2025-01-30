@@ -1,5 +1,6 @@
 package am2.entities.ai;
 
+import am2.LogHelper;
 import am2.api.math.AMVector3;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityCreature;
@@ -107,9 +108,14 @@ public class EntityAIGuardSpawnLocation extends EntityAIBase{
 			for (int i1 = 0; i1 <= 4; i1++){
 				Block block = theWorld.getBlock(i + l, k - 1, j + i1);
 				Block otherBlock = theWorld.getBlock(i + l, k + 1, j + i1);
-				if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.theWorld.doesBlockHaveSolidTopSurface(theWorld, i + l, k - 1, j + i1) && !otherBlock.isBlockNormalCube()){
-					this.theGuard.setLocationAndAngles((double)((float)(i + l) + 0.5F), (double)k, (double)((float)(j + i1) + 0.5F), this.theGuard.rotationYaw, this.theGuard.rotationPitch);
-					this.guardPathfinder.clearPathEntity();
+				try{
+					if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && World.doesBlockHaveSolidTopSurface(theWorld, i + l, k - 1, j + i1) && !otherBlock.isBlockNormalCube()){
+						this.theGuard.setLocationAndAngles((float)(i + l) + 0.5F, k, (float)(j + i1) + 0.5F, this.theGuard.rotationYaw, this.theGuard.rotationPitch);
+						this.guardPathfinder.clearPathEntity();
+						return;
+					}
+				} catch (Throwable e) {
+					LogHelper.info("Could not update Guardian's spawn location to guard in location in X:" + spawnLocation.x + " Y:" + spawnLocation.y + " Z:" + spawnLocation.z);
 					return;
 				}
 			}
