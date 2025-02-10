@@ -444,7 +444,8 @@ public class ParticleManagerClient extends ParticleManagerServer{
 
 		if (ent.worldObj.isRemote && ent instanceof EntityPlayer && AMCore.proxy.playerTracker.hasAA((EntityPlayer)ent)){
 			if (Minecraft.getMinecraft().thePlayer != ent || Minecraft.getMinecraft().gameSettings.thirdPersonView > 0){
-				if (AMParticle.particleTypes[particleIndex].startsWith("lightning_bolts")){
+				if (particleIndex >= 0 && particleIndex < AMParticle.particleTypes.length &&
+    				AMParticle.particleTypes[particleIndex].startsWith("lightning_bolts")){
 					int type = Integer.parseInt(new String(new char[]{AMParticle.particleTypes[particleIndex].charAt(AMParticle.particleTypes[particleIndex].length() - 1)}));
 					if (ent.worldObj.rand.nextInt(100) < 90){
 						BoltFromPointToPoint(ent.worldObj,
